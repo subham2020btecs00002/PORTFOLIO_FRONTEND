@@ -391,3 +391,15 @@ body {
         transform: translate(-50%, -40%); /* End position */
     }
 }
+
+.about-me{
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ecf0f1;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+}
