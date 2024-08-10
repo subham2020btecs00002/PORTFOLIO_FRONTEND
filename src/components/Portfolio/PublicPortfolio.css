@@ -1,0 +1,358 @@
+/* PublicPortfolio.css */
+
+/* Base Styles */
+body {
+    background-color: #f7f8fa;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.public-portfolio {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.portfolio-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.portfolio-header h1 {
+    font-size: 2.8em;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.portfolio-header p {
+    font-size: 1.2em;
+    color: #7f8c8d;
+    margin-bottom: 0;
+}
+
+/* Content Styles */
+.portfolio-content h2 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    color: #34495e;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+.professional-history {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ecf0f1;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.company-duration {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    font-size: 1.8em;
+    color: #2980b9;
+    margin: 0;
+    flex: 1;
+}
+
+.duration {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    margin: 0;
+    text-align: right;
+}
+
+.position {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    margin: 10px 0;
+    
+}
+.position .label {
+    font-weight: bold; /* Makes the label bold */
+}
+
+.responsibility {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.responsibility-label {
+    display: block; /* Ensures it's on a new line */
+    margin-bottom: 10px; /* Space between label and list */
+    font-weight: bold; /* Makes the label bold */
+}
+
+.responsibility-list {
+    margin-left: 20px; /* Indent for clarity */
+    padding-left: 0; /* Remove padding */
+}
+
+.responsibility-list p {
+    position: relative; /* Ensure pseudo-element is positioned relative to this element */
+    margin: 0; /* Remove default margins */
+    padding: 0 0 0 20px; /* Space for the bullet point */
+    font-size: 1.1em; /* Adjust font size if needed */
+}
+
+.responsibility-list p::before {
+    content: "•"; /* Bullet point */
+    position: absolute; /* Position it relative to the p element */
+    left: 0; /* Align to the left of the p element */
+    color: #00090f; /* Bullet color, adjust as needed */
+    font-size: 1.1em; /* Bullet size, adjust as needed */
+    line-height: 1.1em; /* Align bullet with text */
+}
+.professional-history, .education, .project {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ecf0f1;
+    transition: transform 0.2s ease-in-out;
+}
+.education .college-name {
+    flex: 1; /* Allow name to take up available space */
+}
+
+.education .duration {
+    text-align: right; /* Align date to the right */
+    font-size: 1.1em;
+    color: #7f8c8d;
+}
+
+.professional-history:hover, .education:hover, .project:hover {
+    transform: translateY(-5px);
+}
+
+.project h3, .education h3, .professional-history h3 {
+    font-size: 1.8em;
+    color: #2980b9;
+    margin-bottom: 10px;
+}
+
+.project p, .education p, .professional-history p {
+    font-size: 1.1em;
+    color: #7f8c8d;
+}
+
+.project-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.project-link:hover {
+    background-color: #2980b9;
+}
+
+.portfolio-links p {
+    font-size: 1.1em;
+    color: #2980b9;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ecf0f1;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.portfolio-links a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.portfolio-links a:hover {
+    color: #2980b9;
+}
+
+/* Header (Navbar) Styles */
+.header {
+    background: linear-gradient(90deg, #1dea07, #06a61e);
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
+}
+
+.header nav {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center;
+    width: 100%; /* Make sure nav takes the full width */
+}
+
+.header nav .nav-right {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header nav ul li {
+    margin: 0 20px;
+}
+
+.header nav ul li a {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold; /* Ensure bold text */
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background 0.3s, border-radius 0.3s;
+    border-radius: 8px;
+    display: block;
+    text-align: center;
+    cursor: pointer; /* Ensure pointer cursor */
+    font-family: Arial, sans-serif; /* Specify a standard font */
+}
+
+/* Ensure cursor pointer when hovering */
+.header nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer; /* Ensure pointer cursor on hover */
+}
+
+/* Contact Form Styles */
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 15px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.contact-form button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .public-portfolio {
+        padding: 15px;
+    }
+
+    .portfolio-header h1 {
+        font-size: 2em;
+    }
+
+    .portfolio-header p {
+        font-size: 1em;
+    }
+
+    .portfolio-content h2 {
+        font-size: 1.8em;
+    }
+
+    .project h3, .education h3, .professional-history h3 {
+        font-size: 1.5em;
+    }
+
+    .project-link {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    .header nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header nav ul li {
+        margin: 10px 0;
+    }
+
+    .header nav ul li:last-child,
+    .header nav ul li:nth-last-child(2) {
+        margin-left: 0;
+    }
+}
+.portfolio-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spacing between each link item */
+    margin-left: 10px;
+  }
+  
+  .link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+  }
+  
+  .portfolio-icon {
+    width: 44px; /* Adjust size as needed */
+    height: 44px; /* Adjust size as needed */
+  }
+  
+  .link-icon {
+    width: 14px; /* Adjust size as needed */
+    height: 14px; /* Adjust size as needed */
+  }
+  

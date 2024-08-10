@@ -1,0 +1,120 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    background-image: url('./images/joanna-kosinska-1_CMoFsPfso-unsplash.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    color: #ffffff; /* White text color */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+    padding: 20px;
+    text-align: center; /* Center-align text */
+}
+
+.home-container h1 {
+    font-size: 3em; /* Larger font size for the heading */
+    margin-bottom: 10px; /* Reduced space between heading and paragraph */
+    animation: fadeInDown 1s ease-in-out;
+}
+
+.home-container p {
+    font-size: 1.5em; /* Larger font size for the paragraph */
+    max-width: 800px; /* Limit the width of the paragraph */
+    margin-bottom: 40px; /* Space between paragraph and CTA section */
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the buttons and message */
+}
+
+.register-message {
+    font-size: 1.2em; /* Slightly larger font size for emphasis */
+    margin-bottom: 20px; /* Space between message and button */
+    color: #ffffff; /* White text color */
+}
+
+.cta-button {
+    background-color: #ff5722; /* Vibrant orange color */
+    color: #ffffff; /* White text color */
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #e64a19; /* Darker orange on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-container h1 {
+        font-size: 2.5em; /* Smaller font size for tablets */
+    }
+
+    .home-container p {
+        font-size: 1.2em; /* Smaller font size for tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .home-container h1 {
+        font-size: 2em; /* Smaller font size for mobile devices */
+    }
+
+    .home-container p {
+        font-size: 1em; /* Smaller font size for mobile devices */
+    }
+}
+.view-portfolio-button {
+    background-color: #2e8b57;
+    color: white;
+    color: #ffffff; /* White text color */
+    border: none;
+    padding: 14px 30px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 20px;
+  }
+  
+  .view-portfolio-button:hover {
+    background-color: #08582a;
+    transform: scale(1.05);
+  }
+  
+  
