@@ -4,10 +4,11 @@ import axios from 'axios';
 import { AuthContext } from '../components/context/AuthContext';
 import debounce from 'lodash/debounce';
 import './Home.css'; // Import the CSS file
-import {baseUrl} from './url';
-
+import { baseUrl } from './url';
+import backgroundImage from './images/joanna-kosinska-1_CMoFsPfso-unsplash.jpg'
 
 const Home = () => {
+  
   const { loadUser, isAuthenticated, user } = useContext(AuthContext);
   const [portfolioExists, setPortfolioExists] = useState(false);
   const navigate = useNavigate();
@@ -53,6 +54,15 @@ const Home = () => {
       navigate(`/portfolio/public/${user._id}`);
     }
   };
+
+  // Progressive background image loading
+  useEffect(() => {
+    const img = new Image();
+    img.src = backgroundImage;
+    img.onload = () => {
+      document.querySelector('.home-container').style.backgroundImage = `url(${img.src})`;
+    };
+  }, []);
 
   return (
     <div className="home-container">
