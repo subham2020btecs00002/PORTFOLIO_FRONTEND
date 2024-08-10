@@ -221,6 +221,7 @@ body {
 
 .header nav ul li {
     margin: 0 20px;
+    cursor: pointer; /* Add this line */
 }
 
 .header nav ul li a {
@@ -325,6 +326,7 @@ body {
 
     .header nav ul li {
         margin: 10px 0;
+        cursor: pointer; /* Add this line */
     }
 
     .header nav ul li:last-child,
@@ -355,4 +357,37 @@ body {
     width: 14px; /* Adjust size as needed */
     height: 14px; /* Adjust size as needed */
   }
-  
+  /* Welcome Message Styles */
+.welcome-message {
+    position: fixed; /* Ensure it stays on top */
+    top: 50%;
+    left: 50%;
+    transform: translate(-20%, -20%);
+    background-color: rgba(30, 173, 20, 0.8);
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000; /* Ensure it is above other content */
+    animation: fadeInOut 3s ease-in-out forwards; /* Animation to fade in and out */
+}
+
+/* Keyframes for Fade In and Out Animation */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -60%); /* Start position */
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%); /* End of fade in */
+    }
+    80% {
+        opacity: 1;
+        transform: translate(-50%, -50%); /* End of visible state */
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -40%); /* End position */
+    }
+}

@@ -67,7 +67,7 @@ const PublicPortfolio = () => {
       console.error('Error sending email:', error);
     }
   };
-  
+
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -77,6 +77,10 @@ const PublicPortfolio = () => {
 
   return (
     <div className="public-portfolio">
+      <div className="welcome-message">
+        <h1>Hi, welcome to my personal portfolio!</h1>
+      </div>
+
       <header className="header">
         <nav>
           <ul class="nav-right">
@@ -116,9 +120,9 @@ const PublicPortfolio = () => {
                   {hist.isCurrentEmployee
                     ? "Present"
                     : new Date(hist.yearOfLeaving).toLocaleDateString("en-GB", {
-                        year: "numeric",
-                        month: "short",
-                      })}
+                      year: "numeric",
+                      month: "short",
+                    })}
                 </p>
               </div>
               <p className="position">
@@ -198,41 +202,41 @@ const PublicPortfolio = () => {
         ) : (
           <p>No projects available</p>
         )}
-    <div className="portfolio-content" id="project">
-      <h2>Portfolio Links</h2>
-      <div className="portfolio-links">
-        <div className="link-item">
-          <img src={githubIcon} alt="GitHub" className="portfolio-icon" />
-          <a
-            href={portfolio.portfolioLinks.github}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={linkIcon} alt="Link" className="link-icon" />
-          </a>
+        <div className="portfolio-content" id="project">
+          <h2>Portfolio Links</h2>
+          <div className="portfolio-links">
+            <div className="link-item">
+              <img src={githubIcon} alt="GitHub" className="portfolio-icon" />
+              <a
+                href={portfolio.portfolioLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={linkIcon} alt="Link" className="link-icon" />
+              </a>
+            </div>
+            <div className="link-item">
+              <img src={leetcodeIcon} alt="LeetCode" className="portfolio-icon" />
+              <a
+                href={portfolio.portfolioLinks.leetcode}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={linkIcon} alt="Link" className="link-icon" />
+              </a>
+            </div>
+            <div className="link-item">
+              <img src={gfgIcon} alt="GeeksforGeeks" className="portfolio-icon" />
+              <a
+                href={portfolio.portfolioLinks.gfg}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={linkIcon} alt="Link" className="link-icon" />
+              </a>
+            </div>
+          </div>
         </div>
-        <div className="link-item">
-          <img src={leetcodeIcon} alt="LeetCode" className="portfolio-icon" />
-          <a
-            href={portfolio.portfolioLinks.leetcode}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={linkIcon} alt="Link" className="link-icon" />
-          </a>
-        </div>
-        <div className="link-item">
-          <img src={gfgIcon} alt="GeeksforGeeks" className="portfolio-icon" />
-          <a
-            href={portfolio.portfolioLinks.gfg}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={linkIcon} alt="Link" className="link-icon" />
-          </a>
-        </div>
-      </div>
-    </div>
       </div>
       <div className="portfolio-content" id="contact">
         <h2>Contact</h2>
