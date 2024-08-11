@@ -5,7 +5,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import debounce from "lodash.debounce";
 import "./PortfolioForm.css";
-import {baseUrl} from '../url'
+import { baseUrl } from '../url'
+import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
+
 
 const CreatePortfolio = () => {
   const { user } = useContext(AuthContext);
@@ -38,7 +40,12 @@ const CreatePortfolio = () => {
     return () => checkPortfolioExists.cancel();
   }, [navigate]);
 
-  if (portfolioExists === null) return <div>Loading...</div>;
+  if (portfolioExists === null)
+    return (
+      <div className="spinner-container">
+        <FaSpinner className="spinner-icon" />
+      </div>
+    );
 
   return portfolioExists ? null : (
     <div>
@@ -102,6 +109,10 @@ const CreatePortfolioForm = () => {
     portfolioLinks: { github: "", leetcode: "", gfg: "" },
   });
   const nameValidator = /^[a-zA-Z\s]*$/;
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [showModal, setShowModal] = useState(false);
+  const [portfolioId, setPortfolioId] = useState(null);
+
 
   const validateEducationField = (name, value, index) => {
     let error = "";
@@ -129,7 +140,7 @@ const CreatePortfolioForm = () => {
     }
     return error;
   };
-  
+
   const validateProfessionalHistoryField = (name, value, index, formData) => {
     const professionalHistory = formData.professionalHistory[index];
     const { yearOfJoining, isCurrentEmployee } = professionalHistory;
@@ -294,9 +305,9 @@ const CreatePortfolioForm = () => {
     const updatedHistory = formData.professionalHistory.map((history, i) =>
       i === index
         ? {
-            ...history,
-            [name]: type === "checkbox" ? checked : value,
-          }
+          ...history,
+          [name]: type === "checkbox" ? checked : value,
+        }
         : history
     );
     setFormData({ ...formData, professionalHistory: updatedHistory });
@@ -437,7 +448,7 @@ const CreatePortfolioForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // Check for validation errors
     const isFormValid =
       !errors.title &&
@@ -458,7 +469,7 @@ const CreatePortfolioForm = () => {
         (history) =>
           !Object.values(
             errors.professionalHistory[
-              formData.professionalHistory.indexOf(history)
+            formData.professionalHistory.indexOf(history)
             ]
           ).some((error) => error)
       ) &&
@@ -467,6 +478,7 @@ const CreatePortfolioForm = () => {
     if (!isFormValid) {
       // Show a message or highlight errors
       toast.error("Please fix the errors in the form before submitting.");
+      setLoading(false);
       return;
     }
 
@@ -486,8 +498,8 @@ const CreatePortfolioForm = () => {
           yearOfLeaving: history.isCurrentEmployee
             ? null
             : history.yearOfLeaving
-            ? new Date(history.yearOfLeaving)
-            : null,
+              ? new Date(history.yearOfLeaving)
+              : null,
         })),
       };
 
@@ -498,7 +510,9 @@ const CreatePortfolioForm = () => {
           headers: { "x-auth-token": localStorage.getItem("token") },
         }
       );
-      toast.success("Portfolio created successfully!");
+      setPortfolioId(response.data.user); // Save portfolio ID
+      setShowModal(true); // Show the confirmation modal
+      toast.success('Portfolio created successfully!', { containerId: 'global' });
       const portfolioId = response.data.user; // Use this to navigate
       console.log(`Portfolio ID: ${portfolioId}`);
 
@@ -508,6 +522,8 @@ const CreatePortfolioForm = () => {
     } catch (err) {
       toast.error("Error creating portfolio");
       console.error(err.response?.data || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -880,8 +896,8 @@ const CreatePortfolioForm = () => {
           <span className="error-message">{errors.portfolioLinks.gfg}</span>
         )}
       </div>
-      <button type="submit" className="submit-btn">
-        Create Portfolio
+      <button type="submit" className="submit-btn" disabled={loading}>
+        {loading ? <span className="loading-spinner"></span> : 'Create'}
       </button>
     </form>
   );

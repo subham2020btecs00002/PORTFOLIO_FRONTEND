@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../Auth/AuthForm.css';
 
 const Register = () => {
-  const { register } = useContext(AuthContext);
+  const { register,registerLoading } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -57,7 +57,13 @@ const Register = () => {
           placeholder="Password"
           required
         />
-        <button type="submit">Register</button>
+        <button type="submit"className="submit-btn" disabled={registerLoading}> {/* Disable button while loading */}
+          {registerLoading ? (
+            <span className="loading-spinner"></span> // Add loading spinner here
+          ) : (
+            'Register'
+          )}
+        </button>
         <p className="redirect-message">Already have an account? <a href="/login">Login here</a></p>
       </form>
     </div>

@@ -1,12 +1,10 @@
-// Login.js
-
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../Auth/AuthForm.css';
 
 const Login = () => {
-  const { login, isAuthenticated, loading, loadUser } = useContext(AuthContext);
+  const { login, isAuthenticated, loading, loadUser ,loginLoading} = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -53,7 +51,13 @@ const Login = () => {
           placeholder="Password"
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit"className="submit-btn" disabled={loginLoading}> {/* Disable button while loading */}
+          {loginLoading ? (
+            <span className="loading-spinner"></span> // Add loading spinner here
+          ) : (
+            'Login'
+          )}
+        </button>
         <p className="redirect-message">Don't have an account? <a href="/register">Register here</a></p>
       </form>
     </div>

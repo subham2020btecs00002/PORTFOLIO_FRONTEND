@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../components/context/AuthContext';
 import debounce from 'lodash/debounce';
+import { FaSpinner } from 'react-icons/fa'; // Import the spinner icon
 import './Home.css'; // Import the CSS file
 import { baseUrl } from './url';
-import backgroundImage from './images/joanna-kosinska-1_CMoFsPfso-unsplash.jpg'
+import backgroundImage from './images/joanna-kosinska-1_CMoFsPfso-unsplash.jpg';
 
 const Home = () => {
-  
   const { loadUser, isAuthenticated, user } = useContext(AuthContext);
   const [portfolioExists, setPortfolioExists] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state added
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,8 @@ const Home = () => {
         setPortfolioExists(data.exists);
       } catch (err) {
         console.error(err.response?.data || err.message);
+      } finally {
+        setLoading(false); // Set loading to false after checking
       }
     }, 500), // Adjust the debounce delay as needed
     []
@@ -34,6 +37,8 @@ const Home = () => {
   useEffect(() => {
     if (isAuthenticated) {
       checkPortfolioExists();
+    } else {
+      setLoading(false); // Set loading to false if not authenticated
     }
   }, [isAuthenticated, checkPortfolioExists]);
 
@@ -70,19 +75,27 @@ const Home = () => {
       <p>Create and manage your professional portfolio with ease.</p>
       {isAuthenticated ? (
         <div className="cta-container">
-          {portfolioExists ? (
-            <>
-              <button className="cta-button" onClick={navigateToEditPortfolio}>
-                Edit your Portfolio
-              </button>
-              <button className="view-portfolio-button" onClick={navigateToViewPortfolio}>
-                View Your Portfolio
-              </button>
-            </>
+          {loading ? (
+            <div className="spinner-container">
+              <FaSpinner className="spinner-icon" />
+            </div> // Display a loading spinner while checking
           ) : (
-            <button className="cta-button" onClick={navigateToCreatePortfolio}>
-              Create your Portfolio
-            </button>
+            <>
+              {portfolioExists ? (
+                <>
+                  <button className="cta-button" onClick={navigateToEditPortfolio}>
+                    Edit your Portfolio
+                  </button>
+                  <button className="view-portfolio-button" onClick={navigateToViewPortfolio}>
+                    View Your Portfolio
+                  </button>
+                </>
+              ) : (
+                <button className="cta-button" onClick={navigateToCreatePortfolio}>
+                  Create your Portfolio
+                </button>
+              )}
+            </>
           )}
         </div>
       ) : (

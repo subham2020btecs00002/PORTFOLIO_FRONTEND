@@ -117,4 +117,21 @@
     transform: scale(1.05);
   }
   
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px; /* Adjust as needed */
+  }
+  
+  .spinner-icon {
+    font-size: 2rem; /* Adjust size as needed */
+    color: #007bff; /* Adjust color as needed */
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
   

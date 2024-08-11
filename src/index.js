@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <App />
-      <ToastContainer />
+      <ToastContainer containerId="global" />
     </AuthProvider>
   </React.StrictMode>
 );

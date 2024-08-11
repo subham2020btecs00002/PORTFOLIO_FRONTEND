@@ -35,6 +35,16 @@ const authReducer = (state, action) => {
         token: action.payload.token,
         user: action.payload.user,
       };
+      case 'LOGIN_REQUEST': // Add this case
+      return {
+        ...state,
+        loginLoading: true,
+      };
+      case 'REGISTER_REQUEST': // Add this case
+      return {
+        ...state,
+        registerLoading: true,
+      };
     case 'LOGOUT':
     case 'AUTH_ERROR':
       localStorage.removeItem('token');
@@ -44,6 +54,8 @@ const authReducer = (state, action) => {
         isAuthenticated: false,
         loading: false,
         user: null,
+        loginLoading: false, // Ensure loading is set to false on error
+        registerLoading: false, // Ensure loading is set to false on error
       };
     default:
       return state;
@@ -72,23 +84,25 @@ const AuthProvider = ({ children }) => {
           dispatch({ type: 'AUTH_ERROR' });
         }
       }
-    }, 300), // Adjust the debounce delay as needed
+    }, 500), // Adjust the debounce delay as needed
     [state.user]
   );
 
   // Register User
   const register = async (formData) => {
+    dispatch({ type: 'REGISTER_REQUEST' }); // Dispatch register request action
     try {
       await axios.post(`${baseUrl}/api/auth/register`, formData);
-      toast.success('Registration successful! Please login.');
+      toast.success('Registration successful! Please login.', { containerId: 'global' });
     } catch (err) {
       dispatch({ type: 'AUTH_ERROR' });
-      toast.error('Registration failed!');
+      toast.error('Registration failed!', { containerId: 'global' });
     }
   };
 
   // Login User
   const login = async (formData) => {
+    dispatch({ type: 'LOGIN_REQUEST' }); // Dispatch login request action
     try {
       const res = await axios.post(`${baseUrl}/api/auth/login `, formData);
       dispatch({
@@ -96,10 +110,10 @@ const AuthProvider = ({ children }) => {
         payload: res.data,
       });
       loadUser(); // Load user after login
-      toast.success('Login successful!');
+      toast.success('Login successful!', { containerId: 'global' });
     } catch (err) {
       dispatch({ type: 'AUTH_ERROR' });
-      toast.error('Login failed!');
+      toast.error('Login failed!', { containerId: 'global' });
     }
   };
 
@@ -121,6 +135,8 @@ const AuthProvider = ({ children }) => {
         token: state.token,
         isAuthenticated: state.isAuthenticated,
         loading: state.loading,
+        loginLoading: state.loginLoading, // Add this line
+        registerLoading: state.registerLoading, // Add this line
         user: state.user,
         register,
         login,

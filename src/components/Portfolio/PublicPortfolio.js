@@ -7,7 +7,7 @@ import "./PublicPortfolio.css";
 import githubIcon from "../images/github.png"; // Update the path as necessary
 import linkIcon from "../images/linkImage.png"; // Update the path as necessary
 import {baseUrl} from '../url'
-
+import { TailSpin } from 'react-loader-spinner'; // Import the spinner component
 import leetcodeIcon from '../images/leetcode.png'; // Update the path as necessary
 import gfgIcon from '../images/icons8-geeksforgeeks-96.png'; // Update the path as necessary
 
@@ -68,8 +68,18 @@ const PublicPortfolio = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) return (
+    <div className="spinner-container">
+      <TailSpin
+        height="80"
+        width="80"
+        color="#007bff"
+        ariaLabel="loading"
+      />
+    </div>
+  );
+
+  if (error) return <div className="error">"No Portfolio Found !!!"</div>;
 
   let currentJob = portfolio.professionalHistory.find(
     (job) => job.isCurrentEmployee

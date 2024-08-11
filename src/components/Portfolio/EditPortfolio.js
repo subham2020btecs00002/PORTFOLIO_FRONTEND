@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "../Portfolio/PortfolioForm.css";
 import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import debounce from "lodash.debounce";
 import {baseUrl} from '../url'
 
@@ -367,6 +368,8 @@ const EditPortfolio = () => {
     })),
     portfolioLinks: { github: "", leetcode: "", gfg: "" },
   });
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const nameValidator = /^[a-zA-Z\s]*$/;
 
   const validateTitle = (title) => {
@@ -742,7 +745,7 @@ const EditPortfolio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // Validation check
     const isFormValid =
       !errors.title &&
@@ -768,6 +771,7 @@ const EditPortfolio = () => {
     if (!isFormValid) {
       // Show a message or highlight errors
       toast.error("Please fix the errors in the form before submitting.");
+      setLoading(false);
       return;
     }
 
@@ -794,10 +798,12 @@ const EditPortfolio = () => {
       await axios.put(`${baseUrl}/api/portfolio`, formattedData, {
         headers: { "x-auth-token": localStorage.getItem("token") },
       });
-      toast.success("Portfolio updated successfully!");
+      toast.success("Portfolio updated successfully!", { containerId: 'global' });
     } catch (err) {
-      toast.error("Error updating portfolio");
+      toast.error("Error updating portfolio", { containerId: 'global' });
       console.error(err.response?.data || err.message);
+    }finally {
+      setLoading(false); // Set loading to false when submission ends
     }
   };
 
@@ -925,9 +931,9 @@ const EditPortfolio = () => {
         )}
       </div>
 
-      <button type="submit" className="submit-btn">
-        Update
-      </button>
+      <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? <span className="loading-spinner"></span> : 'Update'}
+        </button>
     </form>
   );
 };

@@ -403,3 +403,11 @@ body {
     flex-direction: column;
     font-size: large;
 }
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+  }
+  
