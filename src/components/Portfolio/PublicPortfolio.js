@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./PublicPortfolio.css";
 import githubIcon from "../images/github.png"; // Update the path as necessary
 import linkIcon from "../images/linkImage.png"; // Update the path as necessary
-import {baseUrl} from '../url'
+import { baseUrl } from '../url'
 import { TailSpin } from 'react-loader-spinner'; // Import the spinner component
 import leetcodeIcon from '../images/leetcode.png'; // Update the path as necessary
 import gfgIcon from '../images/icons8-geeksforgeeks-96.png'; // Update the path as necessary
@@ -40,8 +40,11 @@ const PublicPortfolio = () => {
     fetchPortfolio();
   }, [userId]);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const handleScrollTo = (section) => {
     document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+    setIsSidebarOpen(false); // Close the sidebar after navigation
   };
 
   const handleInputChange = (e) => {
@@ -93,14 +96,39 @@ const PublicPortfolio = () => {
 
       <header className="header">
         <nav>
-          <ul class="nav-right">
+          <div className="nav-left">
+            <button
+              className="toggle-button"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              ☰
+            </button>
+          </div>
+          <ul className="nav-right">
             <li onClick={() => handleScrollTo("about")}>About</li>
+            <li onClick={() => handleScrollTo("resume")}>My Resume</li>
             <li onClick={() => handleScrollTo("project")}>My Projects</li>
             <li onClick={() => handleScrollTo("contact")}>Contact Me</li>
           </ul>
         </nav>
       </header>
 
+      {isSidebarOpen && (
+        <div className="sidebar">
+          <button
+            className="close-button"
+            onClick={() => setIsSidebarOpen(false)}
+          >
+            ✖
+          </button>
+          <ul>
+            <li onClick={() => handleScrollTo("about")}>About</li>
+            <li onClick={() => handleScrollTo("resume")}>My Resume</li>
+            <li onClick={() => handleScrollTo("project")}>My Projects</li>
+            <li onClick={() => handleScrollTo("contact")}>Contact Me</li>
+          </ul>
+        </div>
+      )}
       <div className="portfolio-header">
         <h1>{portfolio.user.name}</h1>
         <p>
@@ -248,6 +276,22 @@ const PublicPortfolio = () => {
           </div>
         </div>
       </div>
+      <div className="portfolio-content" id="resume">
+        <h2>Resume</h2>
+        {portfolio?._id ? (
+          <a
+            href={`${baseUrl}/api/portfolio/download/${portfolio._id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="resume-download-link"
+          >
+            <button className="download-button">Download Resume</button>
+          </a>
+        ) : (
+          <p>No resume available to download</p>
+        )}
+      </div>
+
       <div className="portfolio-content" id="contact">
         <h2>Contact</h2>
         <form onSubmit={handleSubmit} className="contact-form">
@@ -297,6 +341,7 @@ const PublicPortfolio = () => {
           <button type="submit">Send</button>
         </form>
       </div>
+
       <ToastContainer />
     </div>
   );

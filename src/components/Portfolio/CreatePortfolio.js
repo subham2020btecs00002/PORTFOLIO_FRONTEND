@@ -81,6 +81,7 @@ const CreatePortfolioForm = () => {
       },
     ],
     portfolioLinks: { github: "", leetcode: "", gfg: "" },
+    pdf: null, // Add pdf to the form data state
   });
 
   const [errors, setErrors] = useState({
@@ -220,6 +221,9 @@ const CreatePortfolioForm = () => {
     }
 
     setFormData({ ...formData, [name]: value });
+  };
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, pdf: e.target.files[0] });
   };
 
   const handleProjectChange = (e, index) => {
@@ -449,76 +453,91 @@ const CreatePortfolioForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Check for validation errors
+  
+    // Validate the form
     const isFormValid =
       !errors.title &&
       !errors.description &&
-      formData.projects.every(
-        (project) =>
-          !errors.projects[formData.projects.indexOf(project)].title &&
-          !errors.projects[formData.projects.indexOf(project)].description &&
-          !errors.projects[formData.projects.indexOf(project)].link
+      formData.projects.every((project) =>
+        !errors.projects[formData.projects.indexOf(project)].title &&
+        !errors.projects[formData.projects.indexOf(project)].description &&
+        !errors.projects[formData.projects.indexOf(project)].link
       ) &&
-      formData.education.every(
-        (edu) =>
-          !Object.values(
-            errors.education[formData.education.indexOf(edu)]
-          ).some((error) => error)
+      formData.education.every((edu) =>
+        !Object.values(errors.education[formData.education.indexOf(edu)]).some((error) => error)
       ) &&
-      formData.professionalHistory.every(
-        (history) =>
-          !Object.values(
-            errors.professionalHistory[
-            formData.professionalHistory.indexOf(history)
-            ]
-          ).some((error) => error)
+      formData.professionalHistory.every((history) =>
+        !Object.values(errors.professionalHistory[formData.professionalHistory.indexOf(history)]).some((error) => error)
       ) &&
       !Object.values(errors.portfolioLinks).some((error) => error);
-
+  
     if (!isFormValid) {
-      // Show a message or highlight errors
       toast.error("Please fix the errors in the form before submitting.");
       setLoading(false);
       return;
     }
-
+  
     try {
-      const formattedData = {
-        ...formData,
-        education: formData.education.map((edu) => ({
-          ...edu,
-          yearOfJoining: edu.yearOfJoining ? new Date(edu.yearOfJoining) : null,
-          yearOfPassing: edu.yearOfPassing ? new Date(edu.yearOfPassing) : null,
-        })),
-        professionalHistory: formData.professionalHistory.map((history) => ({
-          ...history,
-          yearOfJoining: history.yearOfJoining
-            ? new Date(history.yearOfJoining)
-            : null,
-          yearOfLeaving: history.isCurrentEmployee
-            ? null
+      const formattedData = new FormData();
+      formattedData.append("title", formData.title);
+      formattedData.append("description", formData.description);
+      formattedData.append("pdf", formData.pdf); // Append the PDF file
+  
+      // Append projects
+      formData.projects.forEach((project, index) => {
+        formattedData.append(`projects[${index}][title]`, project.title);
+        formattedData.append(`projects[${index}][description]`, project.description);
+        formattedData.append(`projects[${index}][link]`, project.link);
+      });
+  
+      // Append education
+      formData.education.forEach((edu, index) => {
+        formattedData.append(`education[${index}][collegeName]`, edu.collegeName);
+        formattedData.append(`education[${index}][degree]`, edu.degree);
+        formattedData.append(`education[${index}][branch]`, edu.branch);
+        formattedData.append(`education[${index}][cgpaOrPercentage]`, edu.cgpaOrPercentage);
+        formattedData.append(`education[${index}][yearOfJoining]`, edu.yearOfJoining ? new Date(edu.yearOfJoining).toISOString() : "");
+        formattedData.append(`education[${index}][yearOfPassing]`, edu.yearOfPassing ? new Date(edu.yearOfPassing).toISOString() : "");
+      });
+  
+      // Append professional history
+      formData.professionalHistory.forEach((history, index) => {
+        formattedData.append(`professionalHistory[${index}][companyName]`, history.companyName);
+        formattedData.append(`professionalHistory[${index}][position]`, history.position);
+        formattedData.append(`professionalHistory[${index}][responsibility]`, history.responsibility);
+        formattedData.append(
+          `professionalHistory[${index}][yearOfJoining]`,
+          history.yearOfJoining ? new Date(history.yearOfJoining).toISOString() : ""
+        );
+        // Updated logic for yearOfLeaving
+        formattedData.append(
+          `professionalHistory[${index}][yearOfLeaving]`,
+          history.isCurrentEmployee
+            ? "1970-01-01T00:00:00.000+00:00"
             : history.yearOfLeaving
-              ? new Date(history.yearOfLeaving)
-              : null,
-        })),
-      };
-
-      const response = await axios.post(
-        `${baseUrl}/api/portfolio`,
-        formattedData,
-        {
-          headers: { "x-auth-token": localStorage.getItem("token") },
-        }
-      );
-      setPortfolioId(response.data.user); // Save portfolio ID
-      setShowModal(true); // Show the confirmation modal
-      toast.success('Portfolio created successfully!', { containerId: 'global' });
-      const portfolioId = response.data.user; // Use this to navigate
-      console.log(`Portfolio ID: ${portfolioId}`);
-
-      navigate(`/portfolio/public/${portfolioId}`);
-
-      // Optionally, navigate to another page or clear the form
+            ? new Date(history.yearOfLeaving).toISOString()
+            : ""
+        );
+        formattedData.append(`professionalHistory[${index}][isCurrentEmployee]`, history.isCurrentEmployee);
+      });
+  
+      // Append portfolio links
+      Object.keys(formData.portfolioLinks).forEach((key) => {
+        formattedData.append(`portfolioLinks[${key}]`, formData.portfolioLinks[key]);
+      });
+  
+      // Make API request
+      const response = await axios.post(`${baseUrl}/api/portfolio`, formattedData, {
+        headers: {
+          "x-auth-token": localStorage.getItem("token"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      setPortfolioId(response.data.user);
+      setShowModal(true);
+      toast.success("Portfolio created successfully!", { containerId: "global" });
+      navigate(`/portfolio/public/${response.data.user}`);
     } catch (err) {
       toast.error("Error creating portfolio");
       console.error(err.response?.data || err.message);
@@ -526,7 +545,7 @@ const CreatePortfolioForm = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="portfolio-form">
       <h2>Create Portfolio</h2>
@@ -896,6 +915,15 @@ const CreatePortfolioForm = () => {
           <span className="error-message">{errors.portfolioLinks.gfg}</span>
         )}
       </div>
+      <div className="form-group">
+        <input
+          type="file"
+          name="pdf"
+          onChange={handleFileChange}
+          accept="application/pdf"
+        />
+      </div>
+
       <button type="submit" className="submit-btn" disabled={loading}>
         {loading ? <span className="loading-spinner"></span> : 'Create'}
       </button>

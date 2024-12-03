@@ -296,6 +296,7 @@ const EditPortfolio = () => {
       },
     ],
     portfolioLinks: { github: "", leetcode: "", gfg: "" },
+    pdf: null, // Include PDF field
   });
 
   useEffect(() => {
@@ -335,6 +336,7 @@ const EditPortfolio = () => {
         };
 
         setFormData(transformData(data));
+        setCurrentPdfUrl(`${baseUrl}/api/portfolio/download/${data._id}`); // Set the current PDF URL
       } catch (err) {
         console.error(err.response?.data || err.message);
       }
@@ -413,6 +415,11 @@ const EditPortfolio = () => {
     }
 
     setFormData({ ...formData, [name]: value });
+  };
+  const [currentPdfUrl, setCurrentPdfUrl] = useState(null); // State for current PDF URL
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, pdf: e.target.files[0] });
   };
 
   const handleProjectChange = (e, index) => {
@@ -767,46 +774,102 @@ const EditPortfolio = () => {
           )
       ) &&
       !Object.values(errors.portfolioLinks || {}).some((error) => error);
-
+  
     if (!isFormValid) {
       // Show a message or highlight errors
       toast.error("Please fix the errors in the form before submitting.");
       setLoading(false);
       return;
     }
-
+  
     try {
-      const formattedData = {
-        ...formData,
-        education: formData.education.map((edu) => ({
-          ...edu,
-          yearOfJoining: edu.yearOfJoining ? new Date(edu.yearOfJoining) : null,
-          yearOfPassing: edu.yearOfPassing ? new Date(edu.yearOfPassing) : null,
-        })),
-        professionalHistory: formData.professionalHistory.map((history) => ({
-          ...history,
-          yearOfJoining: history.yearOfJoining
-            ? new Date(history.yearOfJoining)
-            : null,
-          yearOfLeaving: history.isCurrentEmployee
-            ? null
-            : history.yearOfLeaving
-            ? new Date(history.yearOfLeaving)
-            : null,
-        })),
-      };
-      await axios.put(`${baseUrl}/api/portfolio`, formattedData, {
-        headers: { "x-auth-token": localStorage.getItem("token") },
+      // Format the data
+      const formattedData = new FormData();
+  
+      // General fields
+      formattedData.append("title", formData.title);
+      formattedData.append("description", formData.description);
+  
+      // Handle file upload if a file is selected
+      if (formData.pdf) {
+        formattedData.append("pdf", formData.pdf);
+      }
+  
+      // Projects
+      formData.projects.forEach((project, index) => {
+        formattedData.append(`projects[${index}][title]`, project.title);
+        formattedData.append(`projects[${index}][description]`, project.description);
+        formattedData.append(`projects[${index}][link]`, project.link);
       });
+  
+      // Education
+      formData.education.forEach((edu, index) => {
+        formattedData.append(`education[${index}][collegeName]`, edu.collegeName);
+        formattedData.append(`education[${index}][degree]`, edu.degree);
+        formattedData.append(`education[${index}][branch]`, edu.branch);
+        formattedData.append(`education[${index}][cgpaOrPercentage]`, edu.cgpaOrPercentage);
+  
+        // Format dates
+        formattedData.append(
+          `education[${index}][yearOfJoining]`,
+          edu.yearOfJoining ? new Date(edu.yearOfJoining).toISOString() : ""
+        );
+        formattedData.append(
+          `education[${index}][yearOfPassing]`,
+          edu.yearOfPassing ? new Date(edu.yearOfPassing).toISOString() : ""
+        );
+      });
+  
+      // Professional history
+      formData.professionalHistory.forEach((history, index) => {
+        formattedData.append(`professionalHistory[${index}][companyName]`, history.companyName);
+        formattedData.append(`professionalHistory[${index}][position]`, history.position);
+        formattedData.append(`professionalHistory[${index}][responsibility]`, history.responsibility);
+  
+        // Format dates
+        formattedData.append(
+          `professionalHistory[${index}][yearOfJoining]`,
+          history.yearOfJoining ? new Date(history.yearOfJoining).toISOString() : ""
+        );
+        formattedData.append(
+          `professionalHistory[${index}][yearOfLeaving]`,
+          history.isCurrentEmployee
+            ? "1970-01-01T00:00:00.000Z" // Placeholder for current employee
+            : history.yearOfLeaving
+            ? new Date(history.yearOfLeaving).toISOString()
+            : ""
+        );
+        formattedData.append(`professionalHistory[${index}][isCurrentEmployee]`, history.isCurrentEmployee);
+      });
+  
+      // Portfolio links
+      Object.keys(formData.portfolioLinks).forEach((key) => {
+        formattedData.append(`portfolioLinks[${key}]`, formData.portfolioLinks[key]);
+      });
+  
+      // Send the data to the API
+      const response = await axios.put(`${baseUrl}/api/portfolio`, formattedData, {
+        headers: {
+          "x-auth-token": localStorage.getItem("token"),
+          "Content-Type": "multipart/form-data", // Important for FormData submission
+        },
+      });
+  
+      // Success message
       toast.success("Portfolio updated successfully!", { containerId: 'global' });
+  
+      // Redirect to public portfolio
+  
     } catch (err) {
+      // Error handling
       toast.error("Error updating portfolio", { containerId: 'global' });
       console.error(err.response?.data || err.message);
-    }finally {
-      setLoading(false); // Set loading to false when submission ends
+    } finally {
+      // Set loading to false when submission ends
+      setLoading(false);
     }
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="portfolio-form">
       <h2>Edit Portfolio</h2>
@@ -928,6 +991,18 @@ const EditPortfolio = () => {
         />
         {errors.portfolioLinks.gfg && (
           <span className="error-message">{errors.portfolioLinks.gfg}</span>
+        )}
+      </div>
+      {/* PDF Upload */}
+      <div className="form-group">
+        <label>Upload PDF</label>
+        <input type="file" name="pdf" onChange={handleFileChange} accept="application/pdf" />
+        {currentPdfUrl && (
+          <div>
+            <a href={currentPdfUrl} target="_blank" rel="noopener noreferrer" >
+              View current PDF
+            </a>
+          </div>
         )}
       </div>
 
