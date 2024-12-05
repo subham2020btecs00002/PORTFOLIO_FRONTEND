@@ -226,15 +226,13 @@ const PublicPortfolio = () => {
                 </div>
               </p>
               {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link"
-                >
-                  View Project
-                </a>
-              )}
+                    <button
+                        onClick={() => window.open(project.link, "_blank")}
+                        className="project-link"
+                    >
+                        View Project
+                    </button>
+                )}
             </div>
           ))
         ) : (

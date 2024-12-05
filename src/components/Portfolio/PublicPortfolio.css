@@ -158,7 +158,9 @@ body {
     background-color: #3498db;
     color: #fff;
     text-decoration: none;
+    border: none;
     border-radius: 8px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
@@ -311,25 +313,25 @@ body {
     background: rgba(255, 255, 255, 0.4); /* Lightens background on hover */
     transform: scale(1.1); /* Slightly enlarges the button on hover */
   }
-  .resume-download-link {
-    text-decoration: none;
-  }
-  
-  .download-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .download-button:hover {
-    background-color: #45a049;
-  }
-  
+.resume-download-link {
+  text-decoration: none;
+}
+
+.download-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #45a049;
+}
+
 /* Contact Form Styles */
 .contact-form {
     max-width: 600px;
